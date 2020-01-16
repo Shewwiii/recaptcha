@@ -197,12 +197,13 @@ module Recaptcha
           // Async variant so you can await this function from another async function (no need for
           // an explicit callback function then!)
           // Returns a Promise that resolves with the response token.
-          async function #{recaptcha_v3_async_execute_function_name(action)}() {
-            return new Promise((resolve, reject) => {
-              grecaptcha.ready(async function() {
-                resolve(await grecaptcha.execute('#{site_key}', {action: '#{action}'}))
+          function #{recaptcha_v3_async_execute_function_name(action)}() {
+            grecaptcha.ready(function() {
+              grecaptcha.execute('#{site_key}', {action: '#{action}'}).then(function(token) {
+                //console.log('#{id}', token)
+                #{callback}('#{id}', token)
               });
-            })
+            });
           };
 
           #{recaptcha_v3_define_default_callback(callback) if recaptcha_v3_define_default_callback?(callback, action, options)}
